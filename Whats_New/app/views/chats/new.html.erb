@@ -1,0 +1,28 @@
+<h1>New Chat</h1>
+
+<%= form_with(model: @chat) do |form| %>
+  <% if @chat.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h4>
+      <ul>
+        <% @chat.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :sender_id, 'Sender', class: 'form-label' %>
+    <%= form.select :sender_id, @users.collect { |u| [u.email, u.id] }, { include_blank: true }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :receiver_id, 'Receiver', class: 'form-label' %>
+    <%= form.select :receiver_id, @users.collect { |u| [u.email, u.id] }, { include_blank: true }, class: 'form-select' %>
+  </div>
+
+  <%= form.submit 'Create Chat', class: 'btn btn-primary' %>
+<% end %>
+
+<%= link_to 'Back', chats_path, class: 'btn btn-secondary mt-3' %>
