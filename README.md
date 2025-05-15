@@ -1,6 +1,6 @@
 # Lab 5-8
 
-## Date student
+## Student
 - **Name:** Bastián Cepeda
 - **Major:** Computer Science
 
