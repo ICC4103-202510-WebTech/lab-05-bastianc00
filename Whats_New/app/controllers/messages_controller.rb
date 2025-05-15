@@ -23,6 +23,23 @@ class MessagesController < ApplicationController
       render :new
     end
   end
+
+  def edit
+    @message = Message.find(params[:id])
+    @chats = Chat.includes(:sender, :receiver).all
+    @users = User.all
+  end
+
+  def update
+    @message = Message.find(params[:id])
+    if @message.update(message_params)
+      redirect_to @message, notice: 'Message was successfully updated.'
+    else
+      @chats = Chat.includes(:sender, :receiver).all
+      @users = User.all
+      render :edit
+    end
+  end
   
   private
   

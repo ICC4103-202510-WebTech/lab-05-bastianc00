@@ -1,7 +1,24 @@
 <h1>User Details</h1>
 
 <p><strong>Email:</strong> <%= @user.email %></p>
-<p><strong>First Name:</strong> <%= @user.first_name %></p>
-<p><strong>Last Name:</strong> <%= @user.last_name %></p>
+<p><strong>Name:</strong> <%= @user.first_name %> <%= @user.last_name %></p>
 
-<%= link_to 'Back to Users', users_path %>
+<h2 class="mt-4">Chats</h2>
+<ul>
+  <% @user.sent_chats.each do |chat| %>
+    <li>Chat with <%= chat.receiver.email %> (<%= link_to 'View', chat %>)</li>
+  <% end %>
+  <% @user.received_chats.each do |chat| %>
+    <li>Chat with <%= chat.sender.email %> (<%= link_to 'View', chat %>)</li>
+  <% end %>
+</ul>
+
+<h2 class="mt-4">Messages Sent</h2>
+<ul>
+  <% @user.sent_messages.each do |message| %>
+    <li><%= message.body %> (in chat <%= link_to message.chat.id, message.chat %>)</li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_user_path(@user), class: 'btn btn-primary' %>
+<%= link_to 'Back', users_path, class: 'btn btn-secondary' %>

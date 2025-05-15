@@ -1,8 +1,9 @@
 <h1>Message Details</h1>
 
-<p><strong>Chat ID:</strong> <%= @message.chat_id %></p>
-<p><strong>User ID:</strong> <%= @message.user_id %></p>
-<p><strong>Body:</strong> <%= @message.body %></p>
-<p><strong>Created At:</strong> <%= @message.created_at %></p>
+<p><strong>Author:</strong> <%= @message.user.email %></p>
+<p><strong>Chat:</strong> Between <%= @message.chat.sender.email %> and <%= @message.chat.receiver.email %></p>
+<p><strong>Content:</strong> <%= @message.body %></p>
+<p><strong>Sent At:</strong> <%= @message.created_at %></p>
 
-<%= link_to 'Back to Messages', messages_path %>
+<%= link_to 'Edit', edit_message_path(@message), class: 'btn btn-primary' %>
+<%= link_to 'Back', messages_path, class: 'btn btn-secondary' %>

@@ -7,8 +7,8 @@
   <thead>
     <tr>
       <th>Email</th>
-      <th>First Name</th>
-      <th>Last Name</th>
+      <th>Name</th>
+      <th>Messages Sent</th> 
       <th>Actions</th>
     </tr>
   </thead>
@@ -16,9 +16,12 @@
     <% @users.each do |user| %>
       <tr>
         <td><%= user.email %></td>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
-        <td><%= link_to 'Show', user_path(user) %></td>
+        <td><%= user.first_name %> <%= user.last_name %></td>
+        <td><%= user.sent_messages.count %></td> 
+        <td>
+          <%= link_to 'Show', user, class: 'btn btn-sm btn-info' %>
+          <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-sm btn-warning' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
