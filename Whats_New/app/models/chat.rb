@@ -1,15 +1,16 @@
 class Chat < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :receiver, class_name: 'User'
-  has_many :messages
-  
+  has_many :messages, dependent: :destroy
   
   validates :sender_id, :receiver_id, presence: true
-  validate :sender_and_receiver_different
+  validate :sender_and_receiver_are_different
   
   private
   
-  def sender_and_receiver_different
-    errors.add(:receiver_id, "can't be the same as sender") if sender_id == receiver_id
+  def sender_and_receiver_are_different
+    if sender_id == receiver_id
+      errors.add(:base, "Sender and receiver can't be the same user")
+    end
   end
 end

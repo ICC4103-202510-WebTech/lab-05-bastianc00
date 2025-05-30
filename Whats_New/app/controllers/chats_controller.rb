@@ -38,6 +38,12 @@ class ChatsController < ApplicationController
       render :edit
     end
   end
+
+  def destroy
+    @chat = Chat.find(params[:id])
+    @chat.destroy
+    redirect_to chats_path, notice: 'Chat was successfully deleted.'
+  end
   
   private
   
