@@ -1,9 +1,10 @@
-
 10.times do |i|
   User.create!(
     email: "user#{i+1}@example.com",
     first_name: "FirstName#{i+1}",
-    last_name: "LastName#{i+1}"
+    last_name: "LastName#{i+1}",
+    password: "password123",
+    password_confirmation: "password123"
   )
 end
 
