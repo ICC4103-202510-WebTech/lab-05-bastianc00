@@ -1,47 +1,37 @@
 class ChatsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_chat, only: [:show, :edit, :update, :destroy]
+  authorize_resource  
 
   def index
-    @chats = Chat.all
+    @chats = current_user.sent_chats.or(current_user.received_chats)
   end
 
   def show
-    @chat = Chat.find(params[:id])
+    authorize! :read, @chat 
   end
 
   def new
-    @chat = Chat.new
-    @users = User.all
+    @chat = current_user.sent_chats.build
+    @users = User.where.not(id: current_user.id)
   end
-  
+
   def create
-    @chat = Chat.new(chat_params)
+    @chat = current_user.sent_chats.build(chat_params)
     if @chat.save
-      redirect_to @chat, notice: 'Chat was successfully created.'
+      redirect_to @chat, notice: 'Chat creado.'
     else
-      @users = User.all
+      @users = User.where.not(id: current_user.id)
       render :new
     end
   end
 
-  def edit
+  private
+
+  def set_chat
     @chat = Chat.find(params[:id])
-    @users = User.all
   end
 
-  def update
-    @chat = Chat.find(params[:id])
-    if @chat.update(chat_params)
-      redirect_to @chat, notice: 'Chat was successfully updated.'
-    else
-      @users = User.all
-      render :edit
-    end
-  end
-  
-  private
-  
   def chat_params
-    params.require(:chat).permit(:sender_id, :receiver_id)
+    params.require(:chat).permit(:receiver_id)
   end
 end

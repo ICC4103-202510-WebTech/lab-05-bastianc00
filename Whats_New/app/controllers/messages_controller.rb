@@ -1,51 +1,31 @@
 class MessagesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource  
 
   def index
-    @messages = Message.all
+    @messages = current_user.sent_messages
   end
 
   def show
-    @message = Message.find(params[:id])
+    
   end
 
   def new
-    @message = Message.new
-    @chats = Chat.all
-    @users = User.all
+    @chats = current_user.chats
   end
-  
+
   def create
-    @message = Message.new(message_params)
+    @message.user = current_user  
     if @message.save
-      redirect_to @message, notice: 'Message was successfully created.'
+      redirect_to @message, notice: 'Mensaje enviado.'
     else
-      @chats = Chat.includes(:sender, :receiver).all
-      @users = User.all
+      @chats = current_user.chats
       render :new
     end
   end
 
-  def edit
-    @message = Message.find(params[:id])
-    @chats = Chat.includes(:sender, :receiver).all
-    @users = User.all
-  end
-
-  def update
-    @message = Message.find(params[:id])
-    if @message.update(message_params)
-      redirect_to @message, notice: 'Message was successfully updated.'
-    else
-      @chats = Chat.includes(:sender, :receiver).all
-      @users = User.all
-      render :edit
-    end
-  end
-  
   private
-  
+
   def message_params
-    params.require(:message).permit(:chat_id, :user_id, :body)
+    params.require(:message).permit(:chat_id, :body)
   end
 end

@@ -1,39 +1,29 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
-  before_action :authenticate_user!
+  load_and_authorize_resource 
 
   def index
     @users = User.all
   end
 
   def show
+   
   end
 
-  def edit
+  def new
+    
   end
 
-  def update
-    if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+  def create
+    if @user.save
+      redirect_to @user, notice: 'Usuario creado correctamente.'
     else
-      render :edit
+      render :new
     end
   end
-  
+
   private
-  
-  def set_user
-    # Protección contra ids no válidos
-    if !params[:id].match?(/^\d+$/)
-      redirect_to root_path, alert: 'User not found'
-      return
-    end
-    @user = User.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to root_path, alert: 'User not found'
-  end
 
   def user_params
-    params.require(:user).permit(:email, :first_name, :last_name)
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
   end
 end

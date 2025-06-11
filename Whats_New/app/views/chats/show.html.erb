@@ -1,32 +1,31 @@
-<h1>Chat Details</h1>
+<div class="container">
+  <h1 class="my-4">Chat Details</h1>
 
-<p><strong>Sender:</strong> <%= @chat.sender.email %></p>
-<p><strong>Receiver:</strong> <%= @chat.receiver.email %></p>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">
+        Between <%= @chat.sender.email %> and <%= @chat.receiver.email %>
+      </h5>
+      <p class="card-text">
+        Created at: <%= @chat.created_at.to_formatted_s(:long) %>
+      </p>
+    </div>
+  </div>
 
-<h2 class="mt-4">Messages</h2>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Author</th>
-      <th>Message</th>
-      <th>Sent At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @chat.messages.each do |message| %>
-      <tr>
-        <td><%= message.user.email %></td>
-        <td><%= message.body %></td>
-        <td><%= message.created_at %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <h2 class="my-4">Messages</h2>
+  <% @chat.messages.each do |message| %>
+    <div class="card mb-2">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">
+          <%= message.user.email %> at <%= message.created_at.to_formatted_s(:short) %>
+        </h6>
+        <p class="card-text"><%= message.body %></p>
+      </div>
+    </div>
+  <% end %>
 
-<% if can? :edit, @chat %>
-  <%= link_to 'Edit', edit_chat_path(@chat), class: 'btn btn-primary' %>
-<% end %>
-<% if can? :destroy, @chat %>
-  <%= link_to 'Delete', @chat, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
-<% end %>
-<%= link_to 'Back', chats_path, class: 'btn btn-secondary' %>
+  <% if can? :create, Message %>
+    <h3 class="my-4">New Message</h3>
+    <%= render 'messages/form', message: @chat.messages.build %>
+  <% end %>
+</div>
