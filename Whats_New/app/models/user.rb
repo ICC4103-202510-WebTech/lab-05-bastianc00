@@ -10,4 +10,8 @@ class User < ApplicationRecord
   
   validates :email, presence: true, uniqueness: true
   validates :first_name, :last_name, presence: true
+
+  def chats
+    Chat.where("sender_id = :id OR receiver_id = :id", id: id)
+  end
 end

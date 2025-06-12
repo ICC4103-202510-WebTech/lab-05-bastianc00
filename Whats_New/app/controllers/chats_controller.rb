@@ -1,10 +1,16 @@
 class ChatsController < ApplicationController
+  load_and_authorize_resource
+  before_action :set_chat, only: [:show, :edit, :update, :destroy]
+  
   def index
     @chats = Chat.all
+    @users = User.where(id: @chats.pluck(:sender_id, :receiver_id).flatten.uniq)
   end
 
   def show
-    @chat = Chat.find(params[:id])
+    @sender = User.find(@chat.sender_id)
+    @receiver = User.find(@chat.receiver_id)
+    @messages = @chat.messages
   end
 
   def new
@@ -14,6 +20,8 @@ class ChatsController < ApplicationController
   
   def create
     @chat = Chat.new(chat_params)
+    @chat.sender_id = current_user
+
     if @chat.save
       redirect_to @chat, notice: 'Chat was successfully created.'
     else
@@ -23,23 +31,32 @@ class ChatsController < ApplicationController
   end
 
   def edit
-    @chat = Chat.find(params[:id])
+    #@chat = Chat.find(params[:id])
     @users = User.all
   end
 
   def update
-    @chat = Chat.find(params[:id])
+    #@chat = Chat.find(params[:id])
     if @chat.update(chat_params)
       redirect_to @chat, notice: 'Chat was successfully updated.'
     else
       @users = User.all
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
-  
+
+  def destroy
+    @chat.destroy
+    redirect_to chats_path, notice: 'Chat deleted successfully.'
+  end
+
   private
-  
+
+  def set_chat
+    @chat = Chat.find(params[:id])
+  end
+
   def chat_params
-    params.require(:chat).permit(:sender_id, :receiver_id)
+    params.require(:chat).permit(:receiver_id)
   end
 end
