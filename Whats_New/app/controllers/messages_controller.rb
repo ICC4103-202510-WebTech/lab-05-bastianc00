@@ -1,12 +1,15 @@
 class MessagesController < ApplicationController
   load_and_authorize_resource
   before_action :set_message, only: [:show, :edit, :update, :destroy]
+
   def index
     @messages = Message.all
+    @users = User.where(id: @messages.pluck(:user_id).uniq)
   end
 
   def show
-    @message = Message.find(params[:id])
+    @user = User.find(@message.user_id)
+    @chat = @message.chat
   end
 
   def new
@@ -33,18 +36,26 @@ class MessagesController < ApplicationController
   end
 
   def update
-    @message = Message.find(params[:id])
     if @message.update(message_params)
       redirect_to @message, notice: 'Message was successfully updated.'
     else
-      @chats = Chat.includes(:sender, :receiver).all
+      @chats = Chat.all
       @users = User.all
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
-  
+
+  def destroy
+    @message.destroy
+    redirect_to messages_path, notice: 'Message was successfully destroyed.'
+  end
+
   private
-  
+
+  def set_message
+    @message = Message.find(params[:id])
+  end
+
   def message_params
     params.require(:message).permit(:chat_id, :user_id, :body)
   end

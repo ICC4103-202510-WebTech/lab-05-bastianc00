@@ -7,7 +7,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @sent_chats = @user.sent_chats
+    @received_chats = @user.received_chats
+    @sent_messages = @user.sent_messages
   end
 
   def new
@@ -19,26 +21,28 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to @user, notice: 'User was successfully created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
       redirect_to @user, notice: 'User was successfully updated.'
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
-  
+
   private
-  
-  def user_params
-    params.require(:user).permit(:email, :first_name, :last_name)
+
+  def set_user
+    @user = User.find(params[:id])
   end
-end
+
+  def user_params
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+  end
+end 
