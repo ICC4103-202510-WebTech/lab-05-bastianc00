@@ -45,10 +45,13 @@ class MessagesController < ApplicationController
     end
   end
 
-  def destroy
-    @message.destroy
+def destroy
+  if @message.destroy
     redirect_to messages_path, notice: 'Message was successfully destroyed.'
+  else
+    redirect_to messages_path, alert: 'Could not delete the message.'
   end
+end
 
   private
 

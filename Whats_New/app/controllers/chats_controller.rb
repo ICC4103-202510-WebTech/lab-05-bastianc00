@@ -20,7 +20,7 @@ class ChatsController < ApplicationController
   
   def create
     @chat = Chat.new(chat_params)
-    @chat.sender_id = current_user
+    @chat.sender_id = current_user.id
 
     if @chat.save
       redirect_to @chat, notice: 'Chat was successfully created.'
@@ -46,8 +46,11 @@ class ChatsController < ApplicationController
   end
 
   def destroy
-    @chat.destroy
-    redirect_to chats_path, notice: 'Chat deleted successfully.'
+    if @chat.destroy
+      redirect_to chats_path, notice: 'Chat and its messages were successfully deleted.'
+    else
+      redirect_to chats_path, alert: 'Could not delete the chat.'
+    end
   end
 
   private

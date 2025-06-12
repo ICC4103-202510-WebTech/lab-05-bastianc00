@@ -1,6 +1,8 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h1>Users</h1>
-  <%= link_to 'New User', new_user_path, class: 'btn btn-success' %>
+  <% if can? :create, User %>
+    <%= link_to 'New User', new_user_path, class: 'btn btn-success' %>
+  <% end %>
 </div>
 
 <table class="table">
@@ -20,7 +22,9 @@
         <td><%= user.sent_messages.count %></td> 
         <td>
           <%= link_to 'Show', user, class: 'btn btn-sm btn-info' %>
-          <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-sm btn-warning' %>
+          <% if can? :edit, user %>
+            <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-sm btn-warning' %>
+          <% end %>
         </td>
       </tr>
     <% end %>

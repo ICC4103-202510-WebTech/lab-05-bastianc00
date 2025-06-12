@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update], unless: -> { params[:id] == 'sign_out' }
 
   def index
     @users = User.all
@@ -45,4 +45,4 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
   end
-end 
+end
