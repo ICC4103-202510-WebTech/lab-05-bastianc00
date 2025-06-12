@@ -1,26 +1,26 @@
 class ChatsController < ApplicationController
   before_action :set_chat, only: [:show, :edit, :update, :destroy]
-  authorize_resource  
+  authorize_resource
 
   def index
-    @chats = current_user.sent_chats.or(current_user.received_chats)
+    @chats = current_user.chats.includes(:sender, :receiver, :messages)
   end
 
   def show
-    authorize! :read, @chat 
+    @message = Message.new
   end
 
   def new
-    @chat = current_user.sent_chats.build
-    @users = User.where.not(id: current_user.id)
+    @chat = Chat.new
+    @users = User.all_except(current_user)
   end
 
   def create
     @chat = current_user.sent_chats.build(chat_params)
     if @chat.save
-      redirect_to @chat, notice: 'Chat creado.'
+      redirect_to @chat, notice: 'Chat creado correctamente.'
     else
-      @users = User.where.not(id: current_user.id)
+      @users = User.all_except(current_user)
       render :new
     end
   end

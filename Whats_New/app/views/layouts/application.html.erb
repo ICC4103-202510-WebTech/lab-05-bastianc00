@@ -17,6 +17,13 @@
     <%= render 'layouts/navigation' %>
     
     <div class="container mt-4">
+        <% if notice %>
+      <div class="alert alert-success"><%= notice %></div>
+        <% end %>
+      <% if alert %>
+        <div class="alert alert-danger"><%= alert %></div>
+      <% end %>
+
       <%= yield %>
     </div>
 

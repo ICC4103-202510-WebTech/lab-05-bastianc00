@@ -1,27 +1,20 @@
 <div class="container">
   <h1 class="my-4">Users</h1>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-        <tr>
-          <td><%= user.email %></td>
-          <td><%= user.first_name %> <%= user.last_name %></td>
-          <td>
-            <%= link_to 'Show', user, class: 'btn btn-sm btn-info' %>
-            <% if can? :update, user %>
-              <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-sm btn-warning' %>
+  <div class="row">
+    <% @users.each do |user| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title"><%= user.first_name %> <%= user.last_name %></h5>
+            <p class="card-text"><%= user.email %></p>
+            <%= link_to 'View Profile', user_path(user), class: 'btn btn-primary' %>
+            <% if can? :edit, user %>
+              <%= link_to 'Edit', edit_user_path(user), class: 'btn btn-secondary' %>
             <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

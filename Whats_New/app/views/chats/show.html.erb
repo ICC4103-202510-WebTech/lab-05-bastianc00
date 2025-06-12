@@ -1,31 +1,30 @@
 <div class="container">
-  <h1 class="my-4">Chat Details</h1>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Chat with <%= @chat.other_user(current_user).full_name %></h2>
+      <%= link_to 'Back', chats_path, class: 'btn btn-secondary' %>
+    </div>
 
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">
-        Between <%= @chat.sender.email %> and <%= @chat.receiver.email %>
-      </h5>
-      <p class="card-text">
-        Created at: <%= @chat.created_at.to_formatted_s(:long) %>
-      </p>
+    <div class="messages" id="messages">
+      <% @chat.messages.each do |message| %>
+        <div class="message <%= message.user == current_user ? 'sent' : 'received' %>">
+          <div class="message-content">
+            <%= message.body %>
+          </div>
+          <div class="message-time">
+            <%= message.created_at.strftime("%H:%M") %>
+            <% if message.user == current_user && can?(:destroy, message) %>
+              <%= link_to message_path(message), method: :delete, data: { confirm: '¿Delete this message?' }, class: 'delete-link' do %>
+                <i class="fas fa-trash-alt"></i>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="message-form">
+      <%= render 'messages/form', message: @message, chat: @chat %>
     </div>
   </div>
-
-  <h2 class="my-4">Messages</h2>
-  <% @chat.messages.each do |message| %>
-    <div class="card mb-2">
-      <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">
-          <%= message.user.email %> at <%= message.created_at.to_formatted_s(:short) %>
-        </h6>
-        <p class="card-text"><%= message.body %></p>
-      </div>
-    </div>
-  <% end %>
-
-  <% if can? :create, Message %>
-    <h3 class="my-4">New Message</h3>
-    <%= render 'messages/form', message: @chat.messages.build %>
-  <% end %>
 </div>

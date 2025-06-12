@@ -1,29 +1,28 @@
 class UsersController < ApplicationController
-  load_and_authorize_resource 
+  load_and_authorize_resource
 
   def index
-    @users = User.all
+    @users = User.all_except(current_user).order(created_at: :desc)
   end
 
   def show
-   
+    @user = User.find(params[:id])
   end
 
-  def new
-    
+  def edit
   end
 
-  def create
-    if @user.save
-      redirect_to @user, notice: 'Usuario creado correctamente.'
+  def update
+    if @user.update(user_params)
+      redirect_to @user, notice: 'Perfil actualizado correctamente.'
     else
-      render :new
+      render :edit
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :avatar)
   end
 end

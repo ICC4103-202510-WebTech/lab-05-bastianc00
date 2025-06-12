@@ -1,32 +1,13 @@
-<%= form_with(model: chat, local: true) do |form| %>
-  <% if chat.errors.any? %>
-    <div class="alert alert-danger">
-      <h4><%= pluralize(chat.errors.count, "error") %> prohibited this chat from being saved:</h4>
-      <ul>
-        <% chat.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+<%= form_with(model: @chat) do |f| %>
   <div class="mb-3">
-    <%= form.label :sender_id, "Sender", class: 'form-label' %>
-    <%= form.select :sender_id, 
-          User.all.collect { |u| [u.email, u.id] }, 
-          { include_blank: 'Select sender...' }, 
-          { class: 'form-select', required: true } %>
-  </div>
-
-  <div class="mb-3">
-    <%= form.label :receiver_id, "Receiver", class: 'form-label' %>
-    <%= form.select :receiver_id, 
-          User.all.collect { |u| [u.email, u.id] }, 
-          { include_blank: 'Select receiver...' }, 
-          { class: 'form-select', required: true } %>
+    <%= f.label :receiver_id, "Select Contact", class: 'form-label' %>
+    <%= f.select :receiver_id, 
+          @users.map { |u| [u.full_name, u.id] },
+          { include_blank: true },
+          class: 'form-select' %>
   </div>
 
   <div class="actions">
-    <%= form.submit chat.persisted? ? 'Update Chat' : 'Create Chat', class: 'btn btn-primary' %>
+    <%= f.submit 'Start Chat', class: 'btn btn-primary' %>
   </div>
 <% end %>

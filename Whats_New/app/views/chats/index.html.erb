@@ -1,24 +1,29 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Chats</h1>
-  <%= link_to 'New Chat', new_chat_path, class: 'btn btn-success' %>
+<div class="container">
+  <h1 class="my-4">Chats</h1>
+
+  <% if @chats.empty? %>
+    <div class="alert alert-info">No chats available</div>
+  <% else %>
+    <div class="list-group">
+      <% @chats.each do |chat| %>
+        <%= link_to chat_path(chat), class: 'list-group-item list-group-item-action' do %>
+          <div class="d-flex justify-content-between">
+            <h5>
+              <%= chat.other_user(current_user).full_name %>
+            </h5>
+            <span class="text-muted">
+              <%= chat.last_message_time %>
+            </span>
+          </div>
+          <p class="mb-1 text-truncate">
+            <%= chat.last_message_content %>
+          </p>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if can? :create, Chat %>
+    <%= link_to 'New Conversation', new_chat_path, class: 'btn btn-success mt-3' %>
+  <% end %>
 </div>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Sender ID</th>
-      <th>Receiver ID</th>
-      <th>Created At</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @chats.each do |chat| %>
-      <tr>
-        <td><%= chat.sender_id %></td>
-        <td><%= chat.receiver_id %></td>
-        <td><%= chat.created_at %></td>
-        <td><%= link_to 'Show', chat_path(chat) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
