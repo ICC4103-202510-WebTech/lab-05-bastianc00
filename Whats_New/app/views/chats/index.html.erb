@@ -1,42 +1,26 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Chats</h1>
+  <h1>My Inbox</h1>
   <% if can? :create, Chat %>
     <%= link_to 'New Chat', new_chat_path, class: 'btn btn-success' %>
   <% end %>
 </div>
-<table class="table">
-  <thead>
-    <tr>
-      <th>Sender ID</th>
-      <th>Receiver ID</th>
-      <th>Created At</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @chats.each do |chat| %>
-      <tr>
-        <td><%= chat.sender_id %></td>
-        <td><%= chat.receiver_id %></td>
-        <td><%= chat.created_at %></td>
-        <td>
-          <%= link_to 'Show', chat_path(chat), class: 'btn btn-sm btn-info' %>
-          <% if can? :edit, chat %>
-            <%= link_to 'Edit', edit_chat_path(chat), class: 'btn btn-sm btn-warning' %>
-          <% end %>
-          <% if can? :destroy, chat %>
-            <%= button_to 'Delete Chat', chat_path(chat), 
-              method: :delete, 
-              form: { 
-                class: 'd-inline',
-                data: { 
-                  turbo_confirm: '¿Are you sure? All messages in this chat will be deleted.' 
-                } 
-              },
-              class: 'btn btn-sm btn-danger' %>
-          <% end %>
-        </td>
-      </tr>
+
+<div class="list-group">
+  <% @chats.each do |chat| %>
+    <%= link_to chat_path(chat), class: "list-group-item list-group-item-action" do %>
+      <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">
+          Conversation with <%= chat.other_participant(current_user).full_name %>
+        </h5>
+        <small><%= time_ago_in_words(chat.updated_at) %> ago</small>
+      </div>
+      <% last_message = chat.messages.last %>
+      <% if last_message %>
+        <p class="mb-1 text-truncate">
+          <strong><%= last_message.user.first_name %>:</strong>
+          <%= last_message.body %>
+        </p>
+      <% end %>
     <% end %>
-  </tbody>
-</table>
+  <% end %>
+</div>

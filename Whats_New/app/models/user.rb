@@ -14,4 +14,12 @@ class User < ApplicationRecord
   def chats
     Chat.where("sender_id = :id OR receiver_id = :id", id: id)
   end
+
+  def admin?
+    admin || false 
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end

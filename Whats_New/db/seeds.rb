@@ -8,6 +8,14 @@
   )
 end
 
+User.create!(
+  email: 'admin@example.com',
+  first_name: 'Admin',
+  last_name: 'User',
+  password: 'password123',
+  password_confirmation: 'password123',
+  admin: true
+)
 
 10.times do |i|
   sender_id = User.offset(i % User.count).first.id

@@ -1,9 +1,10 @@
 class ChatsController < ApplicationController
   load_and_authorize_resource
   before_action :set_chat, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
   
   def index
-    @chats = Chat.all
+    @chats = Chat.for_user(current_user)
     @users = User.where(id: @chats.pluck(:sender_id, :receiver_id).flatten.uniq)
   end
 
