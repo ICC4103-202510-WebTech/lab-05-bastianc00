@@ -1,3 +1,8 @@
+# Elimina todos los datos existentes antes de sembrar nuevos datos
+Message.delete_all
+Chat.delete_all
+User.delete_all
+
 10.times do |i|
   User.create!(
     email: "user#{i+1}@example.com",
