@@ -1,4 +1,4 @@
-# Lab Web Technologie
+# Lab Web Technologies
 
 ## Student
 - **Name:** Bastián Cepeda
