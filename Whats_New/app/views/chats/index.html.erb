@@ -25,7 +25,15 @@
             <%= link_to 'Edit', edit_chat_path(chat), class: 'btn btn-sm btn-warning' %>
           <% end %>
           <% if can? :destroy, chat %>
-            <%= link_to 'Delete', chat_path(chat), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-danger' %>
+            <%= button_to 'Delete Chat', chat_path(chat), 
+              method: :delete, 
+              form: { 
+                class: 'd-inline',
+                data: { 
+                  turbo_confirm: '¿Are you sure? All messages in this chat will be deleted.' 
+                } 
+              },
+              class: 'btn btn-sm btn-danger' %>
           <% end %>
         </td>
       </tr>

@@ -7,13 +7,11 @@ class Chat < ApplicationRecord
   # Validaciones
   validates :sender_id, presence: true
   validates :receiver_id, presence: true
-  validate :sender_and_receiver_different
+  validate :cannot_message_self
 
   private
 
-  def sender_and_receiver_different
-    if sender_id == receiver_id
-      errors.add(:receiver_id, "no puede ser el mismo que el remitente")
-    end
+  def cannot_message_self
+    errors.add(:receiver_id, "Cannot be the same as sender") if sender_id == receiver_id
   end
-end 
+end
